@@ -1,8 +1,36 @@
 const express = require("express");
 const router = express.Router();
 const Alerta = require("../models/Alerta");
+const axios = require("axios");
 
-// POST → guardar alerta
+
+const TELEGRAM_TOKEN = "8284182479:AAHynecDTw1Mpr4sDwcVYvg_ZQbMkA0xQAc";
+const CHAT_ID = "1313182620";
+
+async function enviarTelegram(data) {
+  try {
+    const mensaje = `
+🚨 *ALERTA DE CHOQUE*
+📦 Datos recibidos:
+\`\`\`
+${JSON.stringify(data, null, 2)}
+\`\`\`
+🕒 ${new Date().toLocaleString()}
+`;
+
+    await axios.post(
+      `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
+      {
+        chat_id: CHAT_ID,
+        text: mensaje,
+        parse_mode: "Markdown"
+      }
+    );
+  } catch (error) {
+    console.error("❌ Error enviando a Telegram:", error.message);
+  }
+}
+
 router.post("/", async (req, res) => {
   try {
     const nuevo = new Alerta({
@@ -10,7 +38,7 @@ router.post("/", async (req, res) => {
     });
 
     await nuevo.save();
-
+       enviarTelegram(req.body);
     res.json({
       mensaje: "Alerta guardada",
       registro: nuevo
