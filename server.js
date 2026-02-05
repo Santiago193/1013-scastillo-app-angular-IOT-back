@@ -14,6 +14,7 @@ connectDB();
 app.use("/dispositivos", require("./routes/dispositivos"));
 app.use("/datos", require("./routes/datos"));
 app.use("/alertas", require("./routes/alertas"));
+app.use("/auth", require("./routes/auth"));
 
 const PORT = process.env.PORT || 3000;
 
