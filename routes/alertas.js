@@ -5,9 +5,39 @@ const axios = require("axios");
 
 
 const TELEGRAM_TOKEN = "8284182479:AAHynecDTw1Mpr4sDwcVYvg_ZQbMkA0xQAc";
-const CHAT_ID = "1313182620";
 
+const CHAT_IDS = [
+  "1313182620",   // Persona 1
+  "7682636299"     // Persona 2 
+];
 async function enviarTelegram(data) {
+  const mensaje = `
+🚨 *ALERTA DE CHOQUE*
+📦 Datos recibidos:
+\`\`\`
+${JSON.stringify(data, null, 2)}
+\`\`\`
+🕒 ${new Date().toLocaleString()}
+`;
+
+  for (const chatId of CHAT_IDS) {
+    try {
+      await axios.post(
+        `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
+        {
+          chat_id: chatId,
+          text: mensaje,
+          parse_mode: "Markdown"
+        }
+      );
+    } catch (error) {
+      console.error(`❌ Error enviando a ${chatId}:`, error.message);
+    }
+  }
+}
+
+
+async function enviarTelegram2(data) {
   try {
     const mensaje = `
 🚨 *ALERTA DE CHOQUE*
@@ -30,7 +60,6 @@ ${JSON.stringify(data, null, 2)}
     console.error("❌ Error enviando a Telegram:", error.message);
   }
 }
-
 router.post("/", async (req, res) => {
   try {
     const nuevo = new Alerta({
