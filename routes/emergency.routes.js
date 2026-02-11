@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const EmergencyContact = require("../models/EmergencyContact");
+const { sendTelegramMessage } = require("../utils/telegram");
 const auth = require("../middleware/auth");
 
 // 📋 listar MIS contactos

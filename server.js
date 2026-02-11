@@ -30,8 +30,6 @@ app.use(express.json());
 
 
 
-require("./utils/telegram");
-
 // 🔌 CONECTAR BD Y CARGAR DEVICES
 connectDB().then(loadDevices);
 
