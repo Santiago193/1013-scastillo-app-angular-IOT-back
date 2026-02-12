@@ -1,12 +1,33 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-
 const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
+
 const User = require("../models/User");
 const EmergencyContact = require("../models/EmergencyContact");
 
 const router = express.Router();
 
+// 👤 usuario actualiza su propia contraseña
+router.put("/me/password", auth, async (req, res) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({
+      error: "Debe enviar una nueva contraseña"
+    });
+  }
+
+  const hash = await bcrypt.hash(password, 10);
+
+  await User.findByIdAndUpdate(req.user.id, {
+    password: hash
+  });
+
+  res.json({
+    message: "Contraseña actualizada correctamente"
+  });
+});
 // REGISTER (admin o sistema)
 router.post("/register", async (req, res) => {
   const { email, password, role } = req.body;
