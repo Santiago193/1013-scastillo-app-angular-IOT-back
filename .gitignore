@@ -1,4 +1,30 @@
-node_modules
+node_modules/
 .env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Build / dist
+dist/
+build/
+
+# Test files
 test-frontend.js
 test-esp32.js
+*.test.js
+*.spec.js
+
+# Coverage
+coverage/
